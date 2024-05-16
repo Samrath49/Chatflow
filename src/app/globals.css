@@ -1,0 +1,15 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import 'react-toastify/dist/ReactToastify.css';
+@import "reactflow/dist/style.css";
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  text-wrap: pretty;
+}
