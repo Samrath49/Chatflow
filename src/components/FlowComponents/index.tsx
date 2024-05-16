@@ -12,6 +12,13 @@ import {
 import { initialNodes, nodeTypes } from './Nodes'
 import { initialEdges, edgeTypes } from './Edges'
 
+/**
+ * React Flow component
+ *
+ * This is the main component of the app. It uses the React Flow library
+ * to render the nodes and edges. It also has controls for zooming and panning.
+ *
+ */
 export default function App() {
   const [nodes, , onNodesChange] = useNodesState(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)

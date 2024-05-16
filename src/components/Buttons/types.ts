@@ -4,4 +4,3 @@ export interface ButtonProps {
   children: ReactNode
   isLoading?: boolean
 }
-

@@ -1,6 +1,6 @@
-import FlowBuilder from '@/components/FlowComponents/FlowBuilder'
-import Header from '@/components/Header/Header'
-import NodesPanel from '@/components/NodesPanel/NodesPanel'
+import FlowBuilder from '@/components/FlowComponents'
+import Header from '@/components/Header'
+import NodesPanel from '@/components/NodesPanel'
 
 /*
  * Home page component

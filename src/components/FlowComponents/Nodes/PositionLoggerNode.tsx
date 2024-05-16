@@ -5,7 +5,11 @@ export type PositionLoggerNodeData = {
   label?: string
 }
 
-export function PositionLoggerNode({ xPos, yPos, data }: NodeProps<PositionLoggerNodeData>) {
+export function PositionLoggerNode({
+  xPos,
+  yPos,
+  data,
+}: NodeProps<PositionLoggerNodeData>) {
   const x = `${Math.round(xPos)}px`
   const y = `${Math.round(yPos)}px`
 
