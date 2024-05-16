@@ -1,4 +1,4 @@
-import FlowCard from '@/components/FlowComponents/FlowBuilder'
+import FlowBuilder from '@/components/FlowComponents/FlowBuilder'
 
 export default function Home() {
   return (
