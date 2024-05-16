@@ -4,7 +4,6 @@ import { useCallback } from 'react'
 import {
   Background,
   Controls,
-  MiniMap,
   ReactFlow,
   addEdge,
   useNodesState,
@@ -33,7 +32,6 @@ export default function App() {
       fitView
     >
       <Background />
-      {/* <MiniMap /> */}
       <Controls />
     </ReactFlow>
   )
