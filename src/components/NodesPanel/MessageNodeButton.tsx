@@ -14,7 +14,7 @@ const MessageNodeButton = () => {
       className='flex h-fit min-w-44 cursor-pointer flex-col items-center justify-between gap-2 rounded-lg border-[1px] border-gray-300 p-3'
       onDragStart={event => onDragStart(event, 'node', 'message')}
     >
-      <MessageIcon className='h-8 w-8' />
+      <MessageIcon className='size-8' />
       Message
     </div>
   )

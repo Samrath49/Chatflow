@@ -30,11 +30,11 @@ export default function App() {
   const storeNodes = useSelector((state: RootState) => state.nodes.nodes)
 
   // Local state hooks
-  const [nodeText, setNodeText] = useState('')
+  // const [nodeText, setNodeText] = useState('')
   const [nodes, setNodes, onNodesChange] = useNodesState(storeNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
   const [selectedNode, setSelectedNode] = useState(null)
-  const [isSelected, setIsSelected] = useState(false)
+  const [, setIsSelected] = useState(false)
   const [reactFlowInstance, setReactFlowInstance] = useState(null)
   const [nodeName, setNodeName] = useState('Node 1')
 
@@ -127,7 +127,7 @@ export default function App() {
 
   return (
     <ReactFlowProvider>
-      <div className='h-full flex-grow' ref={flowRef}>
+      <div className='h-full grow' ref={flowRef}>
         <ReactFlow
           nodes={nodes}
           nodeTypes={nodeTypes}

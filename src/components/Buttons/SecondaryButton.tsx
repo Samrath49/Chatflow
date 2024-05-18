@@ -16,7 +16,7 @@ const SecondaryButton = ({ children, isLoading }: ButtonProps) => {
       {isLoading ? (
         <span className='relative only:-mx-5'>
           <svg
-            className='h-5 w-5 animate-spin text-blue-500 group-hover:text-blue-600 group-focus:text-blue-700'
+            className='size-5 animate-spin text-blue-500 group-hover:text-blue-600 group-focus:text-blue-700'
             xmlns='http://www.w3.org/2000/svg'
             fill='none'
             viewBox='0 0 24 24'

@@ -1,5 +1,4 @@
 import type { Node, NodeTypes } from 'reactflow'
-import { PositionLoggerNode } from './PositionLoggerNode'
 import MessageNode from '@/components/FlowComponents/Nodes/MessageNode'
 
 export const initialNodes = [

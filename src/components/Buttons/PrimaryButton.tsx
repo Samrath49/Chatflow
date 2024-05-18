@@ -16,7 +16,7 @@ const PrimaryButton = ({ children, isLoading }: ButtonProps) => {
       {isLoading ? (
         <span className='relative only:-mx-5'>
           <svg
-            className='h-5 w-5 animate-spin text-white'
+            className='size-5 animate-spin text-white'
             xmlns='http://www.w3.org/2000/svg'
             fill='none'
             viewBox='0 0 24 24'
