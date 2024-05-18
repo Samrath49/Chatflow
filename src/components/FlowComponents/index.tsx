@@ -85,7 +85,7 @@ export default function App() {
     } else {
       setNodes(storeNodes)
     }
-  }, [dispatch, storeNodes, initialNodes, setNodes])
+  }, [dispatch, storeNodes, setNodes])
 
   useEffect(() => {
     const node = nodes.find(node => node.selected)
@@ -94,7 +94,7 @@ export default function App() {
     } else {
       dispatch(updateSelectedNodeId(null))
     }
-  }, [nodes])
+  }, [dispatch, nodes])
 
   useEffect(() => {
     textRef?.current?.focus()
