@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { ToastContainer } from 'react-toastify'
-
+import { StoreProvider } from '@/store'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -24,7 +24,7 @@ export default function RootLayout({
           containerId='toastContainer'
           draggable={false}
         />
-        {children}
+        <StoreProvider>{children}</StoreProvider>
       </body>
     </html>
   )
