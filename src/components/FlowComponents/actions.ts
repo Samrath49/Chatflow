@@ -1,6 +1,11 @@
 import { addEdge, MarkerType, Node } from 'reactflow'
 import { Dispatch } from 'redux'
-import { loadNodes, addNode, nodesDeleted } from '@/slices/nodeSlice'
+import {
+  loadNodes,
+  addNode,
+  nodesDeleted,
+  updateSelectedNodeId,
+} from '@/slices/nodeSlice'
 
 // Function to handle new edge connections
 export const handleConnect = (params, setEdges) => {
@@ -36,8 +41,7 @@ export const handleDrop = (
   flowRef,
   reactFlowInstance,
   dispatch: Dispatch,
-  getId: () => string,
-  setSelectedNode: (id: string) => void
+  getId: () => string
 ) => {
   event.preventDefault()
   const reactFlowBounds = flowRef.current.getBoundingClientRect()
@@ -55,7 +59,7 @@ export const handleDrop = (
     data: { heading: 'Send Message', content: label },
   }
   dispatch(addNode(newNode))
-  setSelectedNode(newNode.id)
+  dispatch(updateSelectedNodeId(newNode.id))
 }
 
 // Function to handle node deletion
@@ -88,4 +92,9 @@ export const handleKeyDown = (event, nodes, handleNodesDelete) => {
       handleNodesDelete(selectedNodes)
     }
   }
+}
+
+// Function to get the selected node from the list of nodes using the selectedNodeId
+export const getSelectedNode = (nodes: Node[], selectedNodeId: string) => {
+  return nodes.find(node => node.id === selectedNodeId)
 }

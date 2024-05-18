@@ -19,7 +19,7 @@ import {
   handleNodesDelete,
   handleKeyDown,
 } from './actions'
-import { loadNodes } from '@/slices/nodeSlice'
+import { loadNodes, updateSelectedNodeId } from '@/slices/nodeSlice'
 
 export default function App() {
   const dispatch = useDispatch()
@@ -27,16 +27,16 @@ export default function App() {
   const textRef = useRef(null)
 
   // State from Redux store
-  const storeNodes = useSelector((state: RootState) => state.nodes.nodes)
+  const { storeNodes, selectedNodeId } = useSelector(
+    (state: RootState) => state.nodes
+  )
+
+  console.log('@selectedNodeId', selectedNodeId)
 
   // Local state hooks
-  // const [nodeText, setNodeText] = useState('')
   const [nodes, setNodes, onNodesChange] = useNodesState(storeNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
-  const [selectedNode, setSelectedNode] = useState(null)
-  const [, setIsSelected] = useState(false)
   const [reactFlowInstance, setReactFlowInstance] = useState(null)
-  const [nodeName, setNodeName] = useState('Node 1')
 
   console.log('@state', storeNodes, edges)
 
@@ -50,13 +50,8 @@ export default function App() {
   const onDragOver = handleDragOver
 
   const onDrop = event =>
-    handleDrop(
-      event,
-      flowRef,
-      reactFlowInstance,
-      dispatch,
-      () => getId(storeNodes, nodes),
-      setSelectedNode
+    handleDrop(event, flowRef, reactFlowInstance, dispatch, () =>
+      getId(storeNodes, nodes)
     )
 
   const onNodesDelete = useCallback(
@@ -95,35 +90,15 @@ export default function App() {
   useEffect(() => {
     const node = nodes.find(node => node.selected)
     if (node) {
-      setSelectedNode(node)
-      setIsSelected(true)
+      dispatch(updateSelectedNodeId(node?.id))
     } else {
-      setSelectedNode(null)
-      setIsSelected(false)
+      dispatch(updateSelectedNodeId(null))
     }
   }, [nodes])
 
   useEffect(() => {
-    setNodeName(selectedNode?.data?.content || '')
-  }, [selectedNode])
-
-  useEffect(() => {
     textRef?.current?.focus()
-  }, [selectedNode])
-
-  useEffect(() => {
-    setNodes(nds =>
-      nds.map(node => {
-        if (node.id === selectedNode?.id) {
-          return {
-            ...node,
-            data: { ...node.data, content: nodeName || ' ' },
-          }
-        }
-        return node
-      })
-    )
-  }, [nodeName, setNodes])
+  }, [selectedNodeId])
 
   return (
     <ReactFlowProvider>
