@@ -1,9 +1,17 @@
-import type { Edge, EdgeTypes } from 'reactflow'
+import { MarkerType, type Edge, type EdgeTypes } from 'reactflow'
 
 export const initialEdges = [
-  { id: 'a->c', source: 'a', target: 'c', animated: true },
-  { id: 'b->d', source: 'b', target: 'd' },
-  { id: 'c->d', source: 'c', target: 'd', animated: true },
+  {
+    id: '"reactflow__edge-1b-2a"',
+    source: '1',
+    sourceHandle: 'b',
+    target: '2',
+    targetHandle: 'a',
+    // label: "edge info",
+    markerEnd: {
+      type: MarkerType.Arrow,
+    },
+  },
 ] satisfies Edge[]
 
 export const edgeTypes = {

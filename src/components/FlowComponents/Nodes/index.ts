@@ -1,24 +1,23 @@
 import type { Node, NodeTypes } from 'reactflow'
 import { PositionLoggerNode } from './PositionLoggerNode'
+import MessageNode from '@/components/FlowComponents/Nodes/MessageNode'
 
 export const initialNodes = [
-  { id: 'a', type: 'input', position: { x: 0, y: 0 }, data: { label: 'wire' } },
   {
-    id: 'b',
-    type: 'position-logger',
-    position: { x: -100, y: 100 },
-    data: { label: 'drag me!' },
+    id: '1',
+    type: 'messageNode',
+    position: { x: 50, y: 200 },
+    data: { heading: 'Send Message', content: 'This is text 1' },
   },
-  { id: 'c', position: { x: 100, y: 100 }, data: { label: 'your ideas' } },
   {
-    id: 'd',
-    type: 'output',
-    position: { x: 0, y: 200 },
-    data: { label: 'with React Flow' },
+    id: '2',
+    type: 'messageNode',
+    position: { x: 300, y: 100 },
+    data: { heading: 'Send Message', content: 'This is text 2' },
   },
 ] satisfies Node[]
 
 export const nodeTypes = {
-  'position-logger': PositionLoggerNode,
+  messageNode: MessageNode,
   // Add any of your custom nodes here!
 } satisfies NodeTypes
