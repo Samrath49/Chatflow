@@ -15,7 +15,7 @@ const Header = () => {
       >
         <div className='flex lg:flex-1'>
           <span className='font-serif text-2xl font-bold text-blue-800'>
-            ChartFlow
+            ChatFlow
           </span>
         </div>
 
