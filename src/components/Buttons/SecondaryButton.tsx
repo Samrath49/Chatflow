@@ -12,11 +12,11 @@ import { ButtonProps } from './types'
  */
 const SecondaryButton = ({ children, isLoading }: ButtonProps) => {
   return (
-    <button className='group inline-flex h-10 min-w-28 items-center justify-center gap-2 whitespace-nowrap rounded border border-blue-500 px-5 text-sm font-medium tracking-wide text-blue-500 transition duration-300 hover:border-blue-600 hover:text-blue-600 focus:border-blue-700 focus:text-blue-700 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-blue-300 disabled:text-blue-300 disabled:shadow-none'>
+    <button className='group inline-flex h-10 min-w-28 items-center justify-center gap-2 whitespace-nowrap rounded border border-emerald-500 px-5 text-sm font-medium tracking-wide text-emerald-500 transition duration-300 hover:border-emerald-600 hover:text-emerald-600 focus:border-emerald-700 focus:text-emerald-700 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-emerald-300 disabled:text-emerald-300 disabled:shadow-none'>
       {isLoading ? (
         <span className='relative only:-mx-5'>
           <svg
-            className='size-5 animate-spin text-blue-500 group-hover:text-blue-600 group-focus:text-blue-700'
+            className='size-5 animate-spin text-emerald-500 group-hover:text-emerald-600 group-focus:text-emerald-700'
             xmlns='http://www.w3.org/2000/svg'
             fill='none'
             viewBox='0 0 24 24'
