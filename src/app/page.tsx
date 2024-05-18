@@ -13,7 +13,7 @@ export default function Home() {
     <main className='flex min-h-screen flex-col items-center justify-between'>
       <Header />
 
-      <div className='flex bg-gray-50'>
+      <div className='flex'>
         <div className='flex' style={{ width: 1250, height: 820 }}>
           <FlowBuilder />
         </div>
