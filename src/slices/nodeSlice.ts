@@ -1,7 +1,12 @@
 import { initialNodes } from '@/components/FlowComponents/Nodes'
+import showToast from '@/services/Toast'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { Node } from 'reactflow'
 
+interface UpdateMessagePayload {
+  id: string
+  message: string
+}
 export interface NodeState {
   storeNodes: Node[]
   isDeleted: boolean
@@ -33,13 +38,17 @@ const nodesSlice = createSlice({
       }
     },
     removeNode: (state, action: PayloadAction<string>) => {
-      state.storeNodes = state.storeNodes.filter(node => node.id !== action.payload)
+      state.storeNodes = state.storeNodes.filter(
+        node => node.id !== action.payload
+      )
       if (typeof window !== 'undefined') {
         localStorage.setItem('savedNodes', JSON.stringify(state.storeNodes))
       }
     },
     updateNode: (state, action: PayloadAction<Node>) => {
-      const index = state.storeNodes.findIndex(node => node.id === action.payload.id)
+      const index = state.storeNodes.findIndex(
+        node => node.id === action.payload.id
+      )
       if (index !== -1) {
         state.storeNodes[index] = action.payload
         if (typeof window !== 'undefined') {
@@ -47,11 +56,23 @@ const nodesSlice = createSlice({
         }
       }
     },
+    updateNodeMessage: (state, action: PayloadAction<UpdateMessagePayload>) => {
+      const node = state.storeNodes.find(node => node.id === action.payload.id)
+      if (node) {
+        node.data.content = action.payload.message
+      }
+    },
     loadNodes: (state, action: PayloadAction<Node[]>) => {
       state.storeNodes = action.payload
       if (typeof window !== 'undefined') {
         localStorage.setItem('savedNodes', JSON.stringify(state.storeNodes))
       }
+    },
+    saveNodes: state => {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('savedNodes', JSON.stringify(state.storeNodes))
+      }
+      showToast('Nodes are saved now.', 'success')
     },
     nodesDeleted: (state, action: PayloadAction<boolean>) => {
       state.isDeleted = action.payload
@@ -67,7 +88,9 @@ export const {
   removeNode,
   updateNode,
   loadNodes,
+  saveNodes,
   nodesDeleted,
+  updateNodeMessage,
   updateSelectedNodeId,
 } = nodesSlice.actions
 
