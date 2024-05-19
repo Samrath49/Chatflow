@@ -3,13 +3,13 @@ import MessageNode from '@/components/FlowComponents/Nodes/MessageNode'
 
 export const initialNodes = [
   {
-    id: '1',
+    id: '0',
     type: 'messageNode',
     position: { x: 50, y: 200 },
     data: { heading: 'Send Message', content: 'This is text 1' },
   },
   {
-    id: '2',
+    id: '1',
     type: 'messageNode',
     position: { x: 300, y: 100 },
     data: { heading: 'Send Message', content: 'This is text 2' },
