@@ -1,8 +1,12 @@
 'use client'
 import React from 'react'
 import SecondaryButton from '../Buttons/SecondaryButton'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { saveNodes } from '@/slices/nodeSlice'
+import { saveEdges } from '@/slices/edgeSlice'
+import { RootState } from '@/store'
+import { validateFlow } from '../FlowComponents/actions'
+import showToast from '@/services/Toast'
 
 /**
  * Header component
@@ -11,9 +15,19 @@ import { saveNodes } from '@/slices/nodeSlice'
  */
 const Header = () => {
   const dispatch = useDispatch()
+  const { storeNodes } = useSelector((state: RootState) => state.nodes)
+  const { storeEdges } = useSelector((state: RootState) => state.edges)
 
   const handleSaveNodes = () => {
-    dispatch(saveNodes())
+    const { isValid, errors } = validateFlow(storeNodes, storeEdges)
+    if (isValid) {
+      dispatch(saveNodes())
+      dispatch(saveEdges())
+    } else {
+      errors.map(error => {
+        showToast(error, 'error')
+      })
+    }
   }
 
   return (
