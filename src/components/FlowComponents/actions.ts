@@ -1,16 +1,17 @@
-import { addEdge, MarkerType, Node } from 'reactflow'
+import { addEdge, MarkerType } from 'reactflow'
+import type { Node, Edge } from 'reactflow'
 import { Dispatch } from 'redux'
 import {
   loadNodes,
   addNode,
-  nodesDeleted,
+  setNodesDeleted,
   updateSelectedNodeId,
 } from '@/slices/nodeSlice'
+import { loadEdges } from '@/slices/edgeSlice'
 
 // Function to handle new edge connections
 export const handleConnect = (params, setEdges) => {
   setEdges(eds => {
-    console.log('@edge', eds)
     return addEdge(
       {
         ...params,
@@ -79,7 +80,8 @@ export const handleNodesDelete = (
       )
   )
   dispatch(loadNodes(remainingNodes))
-  dispatch(nodesDeleted(true))
+  dispatch(loadEdges(remainingEdges))
+  dispatch(setNodesDeleted(true))
   setNodes(remainingNodes)
   setEdges(remainingEdges)
 }
@@ -97,4 +99,64 @@ export const handleKeyDown = (event, nodes, handleNodesDelete) => {
 // Function to get the selected node from the list of nodes using the selectedNodeId
 export const getSelectedNode = (nodes: Node[], selectedNodeId: string) => {
   return nodes.find(node => node.id === selectedNodeId)
+}
+
+export function validateFlow(
+  nodes: Node[],
+  edges: Edge[]
+): { isValid: boolean; errors: string[] } {
+  const allSourceNodes = edges.map(edge => edge.source)
+  const allTargetNodes = edges.map(edge => edge.target)
+  const errors: string[] = []
+
+  // Check if no nodes and edges are provided
+  if (nodes.length === 0 || edges.length === 0) {
+    errors.push('Invalid flow. No nodes found.')
+  } else {
+    // Check if each source node is connected to exactly one edge
+    const invalidSourceNodes = allSourceNodes.filter(sourceNode => {
+      const count = allSourceNodes.filter(node => node === sourceNode).length
+      return count !== 1
+    })
+    if (invalidSourceNodes.length > 0) {
+      errors.push('Some nodes have multiple outgoing edges.')
+    }
+
+    // Check if each target node is connected to at least one edge
+    const invalidTargetNodes = nodes.filter(node => {
+      // Exclude the initial node from this check
+      if (allSourceNodes.length > 0 && !allSourceNodes.includes(node.id)) {
+        return !allTargetNodes.includes(node.id)
+      }
+      return false
+    })
+    if (invalidTargetNodes.length > 0) {
+      errors.push('Some nodes are not connected to any incoming edges.')
+    }
+
+    // Check for cycles
+    const hasCycle = edges.some(edge => {
+      const visited: Set<string> = new Set()
+      const stack: string[] = [edge.source]
+      while (stack.length) {
+        const current = stack.pop()!
+        if (visited.has(current)) return true // Cycle detected
+        visited.add(current)
+        const outgoingEdges = edges.filter(e => e.source === current)
+        outgoingEdges.forEach(e => stack.push(e.target))
+      }
+      return false
+    })
+    if (hasCycle) {
+      errors.push('The flow contains a cycle.')
+    }
+  }
+
+  // Combine all checks
+  const isValid = errors.length === 0
+
+  return {
+    isValid,
+    errors,
+  }
 }

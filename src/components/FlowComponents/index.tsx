@@ -20,6 +20,7 @@ import {
   handleKeyDown,
 } from './actions'
 import { loadNodes, updateSelectedNodeId } from '@/slices/nodeSlice'
+import { loadEdges } from '@/slices/edgeSlice'
 
 export default function App() {
   const dispatch = useDispatch()
@@ -30,18 +31,17 @@ export default function App() {
   const { storeNodes, selectedNodeId } = useSelector(
     (state: RootState) => state.nodes
   )
-
-  console.log('@selectedNodeId', selectedNodeId)
+  const { storeEdges } = useSelector((state: RootState) => state.edges)
 
   // Local state hooks
   const [nodes, setNodes, onNodesChange] = useNodesState(storeNodes)
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
+  const [edges, setEdges, onEdgesChange] = useEdgesState(storeEdges)
   const [reactFlowInstance, setReactFlowInstance] = useState(null)
 
-  console.log('@state', storeNodes, edges)
-
   const onConnect = useCallback(
-    params => handleConnect(params, setEdges),
+    params => {
+      handleConnect(params, setEdges)
+    },
     [setEdges]
   )
 
@@ -91,6 +91,25 @@ export default function App() {
       setNodes(storeNodes)
     }
   }, [dispatch, storeNodes, setNodes])
+
+  useEffect(() => {
+    if (edges?.length > 0) {
+      dispatch(loadEdges(edges))
+    }
+  }, [dispatch, edges])
+
+  useEffect(() => {
+    if (storeEdges.length === 0 && initialEdges.length > 0) {
+      if (typeof window !== 'undefined') {
+        const savedEdges = JSON.parse(localStorage.getItem('savedEdges'))
+        if (!savedEdges) {
+          dispatch(loadEdges(initialEdges))
+        }
+      }
+    } else {
+      setEdges(storeEdges)
+    }
+  }, [dispatch, storeEdges, setEdges])
 
   useEffect(() => {
     const node = nodes.find(node => node.selected)
