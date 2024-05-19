@@ -1,5 +1,8 @@
+'use client'
 import React from 'react'
 import SecondaryButton from '../Buttons/SecondaryButton'
+import { useDispatch } from 'react-redux'
+import { saveNodes } from '@/slices/nodeSlice'
 
 /**
  * Header component
@@ -7,6 +10,12 @@ import SecondaryButton from '../Buttons/SecondaryButton'
  * Renders the site header with the ChartFlow title and a Save Changes button.
  */
 const Header = () => {
+  const dispatch = useDispatch()
+
+  const handleSaveNodes = () => {
+    dispatch(saveNodes())
+  }
+
   return (
     <header className='w-full bg-gradient-to-b from-gray-50 to-gray-200'>
       <nav
@@ -20,7 +29,9 @@ const Header = () => {
         </div>
 
         <div className='flex flex-1 justify-end'>
-          <SecondaryButton>Save changes</SecondaryButton>
+          <SecondaryButton onClick={() => handleSaveNodes()}>
+            Save changes
+          </SecondaryButton>
         </div>
       </nav>
     </header>
