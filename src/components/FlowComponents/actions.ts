@@ -78,9 +78,9 @@ export const handleNodesDelete = (
         node => edge.source === node.id || edge.target === node.id
       )
   )
-  console.log('@remaining', remainingNodes)
   dispatch(loadNodes(remainingNodes))
   dispatch(nodesDeleted(true))
+  setNodes(remainingNodes)
   setEdges(remainingEdges)
 }
 

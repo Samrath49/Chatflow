@@ -81,7 +81,12 @@ export default function App() {
 
   useEffect(() => {
     if (storeNodes.length === 0 && initialNodes.length > 0) {
-      dispatch(loadNodes(initialNodes))
+      if (typeof window !== 'undefined') {
+        const savedNodes = JSON.parse(localStorage.getItem('savedNodes'))
+        if (!savedNodes) {
+          dispatch(loadNodes(initialNodes))
+        }
+      }
     } else {
       setNodes(storeNodes)
     }
