@@ -10,9 +10,34 @@ import { ButtonProps } from './types'
  * This component renders a button with a loading spinner when isLoading is true.
  * It takes a single children prop, which is the text to be displayed when the button is not loading.
  */
-const PrimaryButton = ({ children, isLoading }: ButtonProps) => {
+const typeClassesMap = {
+  primary: {
+    base: 'bg-emerald-500 hover:bg-emerald-600 focus:bg-emerald-700 disabled:border-emerald-300 disabled:bg-emerald-300',
+  },
+  danger: {
+    base: 'bg-red-500 hover:bg-red-600 focus:bg-red-700 disabled:border-red-300 disabled:bg-red-300',
+  },
+  warning: {
+    base: 'bg-orange-500 hover:bg-orange-600 focus:bg-orange-700 disabled:border-orange-300 disabled:bg-orange-300',
+  },
+  // Add more type mappings as needed
+}
+
+const PrimaryButton = ({
+  children,
+  type = 'primary',
+  isLoading,
+}: ButtonProps) => {
+  const baseClasses =
+    'inline-flex h-10 min-w-28 items-center justify-center gap-2 whitespace-nowrap rounded px-5 text-sm font-medium tracking-wide text-white transition duration-300 focus-visible:outline-none disabled:cursor-not-allowed disabled:shadow-none'
+  const typeClasses =
+    typeClassesMap[type]?.base || typeClassesMap['primary'].base
+
   return (
-    <button className='inline-flex h-10 min-w-28 items-center justify-center gap-2 whitespace-nowrap rounded bg-emerald-500 px-5 text-sm font-medium tracking-wide text-white transition duration-300 hover:bg-emerald-600 focus:bg-emerald-700 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-emerald-300 disabled:bg-emerald-300 disabled:shadow-none'>
+    <button
+      className={`${baseClasses} ${typeClasses} ${isLoading ? 'cursor-wait' : ''}`}
+      disabled={isLoading}
+    >
       {isLoading ? (
         <span className='relative only:-mx-5'>
           <svg
@@ -31,7 +56,7 @@ const PrimaryButton = ({ children, isLoading }: ButtonProps) => {
               cy='12'
               r='10'
               stroke='currentColor'
-              stroke-width='4'
+              strokeWidth='4'
             ></circle>
             <path
               className='opacity-75'

@@ -4,4 +4,5 @@ export interface ButtonProps {
   children: ReactNode
   isLoading?: boolean
   onClick?: () => void
+  type?: string
 }
