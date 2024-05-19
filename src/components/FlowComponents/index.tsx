@@ -1,5 +1,5 @@
 'use client'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState, useMemo } from 'react'
 import {
   Background,
   ReactFlow,
@@ -22,7 +22,7 @@ import {
 import { loadNodes, updateSelectedNodeId } from '@/slices/nodeSlice'
 import { loadEdges } from '@/slices/edgeSlice'
 
-export default function App() {
+const App = () => {
   const dispatch = useDispatch()
   const flowRef = useRef(null)
   const textRef = useRef(null)
@@ -38,6 +38,7 @@ export default function App() {
   const [edges, setEdges, onEdgesChange] = useEdgesState(storeEdges)
   const [reactFlowInstance, setReactFlowInstance] = useState(null)
 
+  // Callback to handle edge connections
   const onConnect = useCallback(
     params => {
       handleConnect(params, setEdges)
@@ -45,17 +46,27 @@ export default function App() {
     [setEdges]
   )
 
-  const onInit = reactFlowInstance => setReactFlowInstance(reactFlowInstance)
+  // Callback to initialize React Flow instance
+  const onInit = useCallback(reactFlowInstance => {
+    setReactFlowInstance(reactFlowInstance)
+  }, [])
 
-  const onDragOver = handleDragOver
+  // Callback to handle drag over event
+  const onDragOver = useCallback(handleDragOver, [])
 
-  const onDrop = event =>
-    handleDrop(event, flowRef, reactFlowInstance, dispatch, () =>
-      getId(storeNodes, nodes)
-    )
+  // Callback to handle drop event
+  const onDrop = useCallback(
+    event => {
+      handleDrop(event, flowRef, reactFlowInstance, dispatch, () =>
+        getId(storeNodes, nodes)
+      )
+    },
+    [dispatch, flowRef, reactFlowInstance, storeNodes, nodes]
+  )
 
+  // Callback to handle node deletion
   const onNodesDelete = useCallback(
-    deletedNodes =>
+    deletedNodes => {
       handleNodesDelete(
         deletedNodes,
         nodes,
@@ -63,15 +74,20 @@ export default function App() {
         dispatch,
         setNodes,
         setEdges
-      ),
-    [nodes, edges, dispatch, setNodes, setEdges]
+      )
+    },
+    [dispatch, edges, nodes, setEdges, setNodes]
   )
 
+  // Callback to handle key down event
   const handleKeyDownCallback = useCallback(
-    event => handleKeyDown(event, nodes, onNodesDelete),
+    event => {
+      handleKeyDown(event, nodes, onNodesDelete)
+    },
     [nodes, onNodesDelete]
   )
 
+  // Effect to add and remove keydown event listener
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDownCallback)
     return () => {
@@ -79,71 +95,92 @@ export default function App() {
     }
   }, [handleKeyDownCallback])
 
+  // Effect to load initial nodes or set nodes from store
   useEffect(() => {
     if (storeNodes.length === 0 && initialNodes.length > 0) {
-      if (typeof window !== 'undefined') {
-        const savedNodes = JSON.parse(localStorage.getItem('savedNodes'))
-        if (!savedNodes) {
-          dispatch(loadNodes(initialNodes))
-        }
+      const savedNodes = JSON.parse(localStorage.getItem('savedNodes'))
+      if (!savedNodes) {
+        dispatch(loadNodes(initialNodes))
       }
     } else {
       setNodes(storeNodes)
     }
-  }, [dispatch, storeNodes, setNodes])
+  }, [dispatch, setNodes, storeNodes])
 
+  // Effect to load initial edges or set edges from store
   useEffect(() => {
-    if (edges?.length > 0) {
+    if (edges.length > 0) {
       dispatch(loadEdges(edges))
     }
   }, [dispatch, edges])
 
+  // Effect to load initial edges or set edges from store
   useEffect(() => {
     if (storeEdges.length === 0 && initialEdges.length > 0) {
-      if (typeof window !== 'undefined') {
-        const savedEdges = JSON.parse(localStorage.getItem('savedEdges'))
-        if (!savedEdges) {
-          dispatch(loadEdges(initialEdges))
-        }
+      const savedEdges = JSON.parse(localStorage.getItem('savedEdges'))
+      if (!savedEdges) {
+        dispatch(loadEdges(initialEdges))
       }
     } else {
       setEdges(storeEdges)
     }
-  }, [dispatch, storeEdges, setEdges])
+  }, [dispatch, setEdges, storeEdges])
 
+  // Effect to update selected node ID when nodes change
   useEffect(() => {
     const node = nodes.find(node => node.selected)
     if (node) {
-      dispatch(updateSelectedNodeId(node?.id))
+      dispatch(updateSelectedNodeId(node.id))
     } else {
       dispatch(updateSelectedNodeId(null))
     }
   }, [dispatch, nodes])
 
+  // Effect to focus on text input when selected node ID changes
   useEffect(() => {
-    textRef?.current?.focus()
+    textRef.current?.focus()
   }, [selectedNodeId])
+
+  // Memoized React Flow component to prevent unnecessary re-renders
+  const memoizedReactFlow = useMemo(
+    () => (
+      <ReactFlow
+        nodes={nodes}
+        nodeTypes={nodeTypes}
+        onNodesChange={onNodesChange}
+        onInit={onInit}
+        edges={edges}
+        onNodesDelete={onNodesDelete}
+        edgeTypes={edgeTypes}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        onDrop={onDrop}
+        onDragOver={onDragOver}
+        attributionPosition='top-right'
+      >
+        <Background color='#fff' />
+      </ReactFlow>
+    ),
+    [
+      nodes,
+      onNodesChange,
+      onInit,
+      edges,
+      onNodesDelete,
+      onEdgesChange,
+      onConnect,
+      onDrop,
+      onDragOver,
+    ]
+  )
 
   return (
     <ReactFlowProvider>
       <div className='h-full grow' ref={flowRef}>
-        <ReactFlow
-          nodes={nodes}
-          nodeTypes={nodeTypes}
-          onNodesChange={onNodesChange}
-          onInit={onInit}
-          edges={edges}
-          onNodesDelete={onNodesDelete}
-          edgeTypes={edgeTypes}
-          onEdgesChange={onEdgesChange}
-          onConnect={onConnect}
-          onDrop={onDrop}
-          onDragOver={onDragOver}
-          attributionPosition='top-right'
-        >
-          <Background color='#fff' />
-        </ReactFlow>
+        {memoizedReactFlow}
       </div>
     </ReactFlowProvider>
   )
 }
+
+export default App

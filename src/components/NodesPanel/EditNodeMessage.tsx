@@ -10,11 +10,11 @@ const EditNodeMessage = () => {
   const { storeNodes, selectedNodeId } = useSelector(
     (state: RootState) => state.nodes
   )
-  
+
   const [nodeMessageText, setNodeMessageText] = useState('')
   const dispatch = useDispatch()
 
-  const debouncedNodeMessageText = useDebounce(nodeMessageText, 2000)
+  const debouncedNodeMessageText = useDebounce(nodeMessageText, 1500)
 
   useEffect(() => {
     if (selectedNodeId) {

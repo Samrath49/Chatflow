@@ -62,7 +62,6 @@ const edgesSlice = createSlice({
     // Load a set of edges into the store and save to localStorage
     loadEdges: (state, action: PayloadAction<Edge[]>) => {
       state.storeEdges = action.payload
-      console.log('@savedEdges', action.payload)
       saveEdgesToLocalStorage(state.storeEdges)
     },
     // Save the current set of edges to localStorage and show a toast notification
