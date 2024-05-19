@@ -10,9 +10,12 @@ import { ButtonProps } from './types'
  * This component renders a button with a loading spinner when isLoading is true.
  * It takes a single children prop, which is the text to be displayed when the button is not loading.
  */
-const SecondaryButton = ({ children, isLoading }: ButtonProps) => {
+const SecondaryButton = ({ children, onClick, isLoading }: ButtonProps) => {
   return (
-    <button className='group inline-flex h-10 min-w-28 items-center justify-center gap-2 whitespace-nowrap rounded border border-emerald-500 px-5 text-sm font-medium tracking-wide text-emerald-500 transition duration-300 hover:border-emerald-600 hover:text-emerald-600 focus:border-emerald-700 focus:text-emerald-700 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-emerald-300 disabled:text-emerald-300 disabled:shadow-none'>
+    <button
+      className='group inline-flex h-10 min-w-28 items-center justify-center gap-2 whitespace-nowrap rounded border border-emerald-500 px-5 text-sm font-medium tracking-wide text-emerald-500 transition duration-300 hover:border-emerald-600 hover:text-emerald-600 focus:border-emerald-700 focus:text-emerald-700 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-emerald-300 disabled:text-emerald-300 disabled:shadow-none'
+      onClick={onClick}
+    >
       {isLoading ? (
         <span className='relative only:-mx-5'>
           <svg
